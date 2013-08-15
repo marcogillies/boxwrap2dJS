@@ -509,6 +509,8 @@ Physics = function (sketch, screenW,  screenH,
 		 */
 		createPolygon : function() {
 			var vertices;
+			var worldVertices = new Array();
+			var average = new Vec2(0, 0);
 			if (arguments.length == 1 && arguments[0].length){
 				vertices = arguments[0];
 			} else {
@@ -518,35 +520,43 @@ Physics = function (sketch, screenW,  screenH,
 				throw new IllegalArgumentException("Vertices must be given as pairs of x,y coordinates, " +
 												   "but number of passed parameters was odd.");
 			var nVertices = vertices.length / 2;
-			var pd = new b2PolyDef();
-			pd.vertexCount = nVertices;
-			var average = new Vec2(0, 0);
+
 			for (var i = 0; i < nVertices; i++) {
 				var v = this.screenToWorld(vertices[2*i],vertices[2*i+1]);
-				//console.log("creating vertex " + v.x + " " + v.y);
-				pd.vertices[i].Set(v.x, v.y);
+				worldVertices[i] = new Vec2(v.x, v.y);
 				average.x += v.x;
 				average.y += v.y;
 			}
+			
 			if(nVertices > 0){
 				average.x /= nVertices;
 				average.y /= nVertices;
 			}
 			for (var i = 0; i < nVertices; i++) {
-				pd.vertices[i].x -= average.x;
-				pd.vertices[i].y -= average.y;
+				worldVertices[i].x -= average.x;
+				worldVertices[i].y -= average.y;
 			}
-			this.setShapeDefProperties(pd);
+			
+
+			var fixDef = new FixtureDef();
+		 	this.setShapeDefProperties(fixDef);
 			
 			
-			var bd = new BodyDef();
-			this.setBodyDefProperties(bd);
-			bd.position.Set(average.x, average.y);
-			bd.AddShape(pd);
-			
-			var b = this.m_world.CreateBody(bd);
-			//this.enhanceBody(b);
-			
+			var bodyDef = new BodyDef();
+			//console.log("density " + this.m_density)
+			if(this.m_density < 0.00001) {
+				//console.log("static body");
+				bodyDef.type = Body.b2_staticBody;
+			} else {
+				//console.log("dynamic body");
+				bodyDef.type = Body.b2_dynamicBody;
+			}
+			bodyDef.position.x = average.x;
+			bodyDef.position.y = average.y;
+			fixDef.shape = new PolygonShape();
+			fixDef.shape.setAsArray(worldVertices, nVertices);
+			var b  = this.m_world.CreateBody(bodyDef);
+			b.CreateFixture(fixDef);
 			
 			return b;
 		},
