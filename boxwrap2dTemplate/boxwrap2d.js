@@ -10,7 +10,16 @@
 */
 
 
-var   Vec2 = Box2D.Common.Math.b2Vec2
+var Vec2 = {};
+Physics = function (sketch, screenW,  screenH,
+								   gravX, gravY,
+								   screenAABBWidth, screenAABBHeight,
+								   borderBoxWidth, borderBoxHeight,
+								   pixelsPerMeter){
+
+  (function() {
+
+    Vec2 = Box2D.Common.Math.b2Vec2
          	,	BodyDef = Box2D.Dynamics.b2BodyDef
          	,	CircleDef = Box2D.Collision.Shapes.b2CircleDef
          	,	Body = Box2D.Dynamics.b2Body
@@ -34,310 +43,305 @@ var   Vec2 = Box2D.Common.Math.b2Vec2
          	,   GearJointDef = Box2D.Dynamics.Joints.b2GearJointDef
             ;
 
-//Body.prototype.getWorldCenter = function (){
-//        v = new Vec2(0, 0);
-//        v.set(this.GetPosition());
-//        return v;
-//};
-//Body.prototype.setPosition = function(v){
-//        angle = this.GetAngle();
-//        this.SetPositionAndAngle(v, angle);
-//};
-Body.prototype.getMass        = Body.prototype.GetMass;
-Body.prototype.getInertia     = Body.prototype.GetInertia;
-Body.prototype.getMassData    = Body.prototype.GetMassData;
-Body.prototype.setMassData    = Body.prototype.SetMassData;
-Body.prototype.resetMassData  = Body.prototype.ResetMassData;
-Body.prototype.applyImpulse   = Body.prototype.ApplyImpulse;
-Body.prototype.setTransform   = Body.prototype.SetPositionAndAngle;
-Body.prototype.getTransform   = Body.prototype.GetTransform;
-Body.prototype.getPosition    = Body.prototype.GetPosition;
-Body.prototype.setPosition    = Body.prototype.SetPosition;
-Body.prototype.getAngle       = Body.prototype.GetAngle;
-Body.prototype.setAngle       = Body.prototype.SetAngle;
-Body.prototype.getWorldCenter = Body.prototype.GetWorldCenter;
-Body.prototype.getLocalCenter = Body.prototype.GetLocalCenter;
+    //Body.prototype.getWorldCenter = function (){
+    //        v = new Vec2(0, 0);
+    //        v.set(this.GetPosition());
+    //        return v;
+    //};
+    //Body.prototype.setPosition = function(v){
+    //        angle = this.GetAngle();
+    //        this.SetPositionAndAngle(v, angle);
+    //};
+    Body.prototype.getMass        = Body.prototype.GetMass;
+    Body.prototype.getInertia     = Body.prototype.GetInertia;
+    Body.prototype.getMassData    = Body.prototype.GetMassData;
+    Body.prototype.setMassData    = Body.prototype.SetMassData;
+    Body.prototype.resetMassData  = Body.prototype.ResetMassData;
+    Body.prototype.applyImpulse   = Body.prototype.ApplyImpulse;
+    Body.prototype.setTransform   = Body.prototype.SetPositionAndAngle;
+    Body.prototype.getTransform   = Body.prototype.GetTransform;
+    Body.prototype.getPosition    = Body.prototype.GetPosition;
+    Body.prototype.setPosition    = Body.prototype.SetPosition;
+    Body.prototype.getAngle       = Body.prototype.GetAngle;
+    Body.prototype.setAngle       = Body.prototype.SetAngle;
+    Body.prototype.getWorldCenter = Body.prototype.GetWorldCenter;
+    Body.prototype.getLocalCenter = Body.prototype.GetLocalCenter;
 
-Body.prototype.setLinearVelocity  = Body.prototype.SetLinearVelocity;
-Body.prototype.getLinearVelocity  = Body.prototype.GetLinearVelocity;
-Body.prototype.setAngularVelocity = Body.prototype.SetAngularVelocity;
-Body.prototype.getAngularVelocity = Body.prototype.GetAngularVelocity;
+    Body.prototype.setLinearVelocity  = Body.prototype.SetLinearVelocity;
+    Body.prototype.getLinearVelocity  = Body.prototype.GetLinearVelocity;
+    Body.prototype.setAngularVelocity = Body.prototype.SetAngularVelocity;
+    Body.prototype.getAngularVelocity = Body.prototype.GetAngularVelocity;
 
-Body.prototype.applyForce = Body.prototype.ApplyForce;
-Body.prototype.applyForceToCenter = function(force){
-	this.applyForce(force, this.getWorldCenter());
-};
-Body.prototype.applyTorque = Body.prototype.ApplyTorque;
-Body.prototype.applyLinearImpulse = Body.prototype.ApplyImpulse;
+    Body.prototype.applyForce = Body.prototype.ApplyForce;
+    Body.prototype.applyForceToCenter = function(force){
+    	this.applyForce(force, this.getWorldCenter());
+    };
+    Body.prototype.applyTorque = Body.prototype.ApplyTorque;
+    Body.prototype.applyLinearImpulse = Body.prototype.ApplyImpulse;
 
-Body.prototype.getWorldPoint = Body.prototype.GetWorldPoint;
-Body.prototype.getWorldPointToOut = function(localPoint, out){
-	out = this.getWorldPoint(localPoint);
-};
-Body.prototype.getWorldVector = Body.prototype.GetWorldVector;
-Body.prototype.getWorldVectorToOut = function(localPoint, out){
-	out = this.getWorldVector(localPoint);
-};
-Body.prototype.getWorldVectorToOutUnsafe = Body.prototype.getWorldVectorToOut;
+    Body.prototype.getWorldPoint = Body.prototype.GetWorldPoint;
+    Body.prototype.getWorldPointToOut = function(localPoint, out){
+    	out = this.getWorldPoint(localPoint);
+    };
+    Body.prototype.getWorldVector = Body.prototype.GetWorldVector;
+    Body.prototype.getWorldVectorToOut = function(localPoint, out){
+    	out = this.getWorldVector(localPoint);
+    };
+    Body.prototype.getWorldVectorToOutUnsafe = Body.prototype.getWorldVectorToOut;
 
-Body.prototype.getLocalPoint = Body.prototype.GetLocalPoint;
-Body.prototype.getLocalPointToOut = function(worldPoint, out){
-	out = this.getLocalPoint(worldPoint);
-};
-Body.prototype.getLocalVector = Body.prototype.GetLocalVector;
-Body.prototype.getLocalVectorToOut = function(worldPoint, out){
-	out = this.getLocalVector(worldPoint);
-};
-Body.prototype.getLocalVectorToOutUnsafe = Body.prototype.getLocalVectorToOut;
-
-
-Body.prototype.getLinearVelocityFromWorldPoint  = Body.prototype.GetLinearVelocity;
-Body.prototype.getLinearVelocityFromWorldPointToOut = function(worldPoint, out){
-	out = this.getLinearVelocityFromWorldPoint(worldPoint);
-};
-Body.prototype.getLinearVelocityFromLocalPoint  = Body.prototype.GetLinearVelocity;
-Body.prototype.getLinearVelocityFromLocalPointToOut = function(localPoint, out){
-	out = this.getLinearVelocityFromLocalPoint(localPoint);
-};
-
-Body.prototype.getLinearDamping = Body.prototype.GetLinearDamping;
-Body.prototype.setLinearDamping = Body.prototype.SetLinearDamping;
-Body.prototype.getAngularDamping = Body.prototype.GetAngularDamping;
-Body.prototype.setAngularDamping = Body.prototype.SetAngularDamping;
-
-Body.prototype.getType = Body.prototype.GetType;
-Body.prototype.setType = Body.prototype.SetType;
-
-Body.prototype.isBullet = Body.prototype.IsBullet;
-Body.prototype.setBullet = Body.prototype.SetBullet;
-
-Body.prototype.isSleepingAllowed = Body.prototype.IsSleepingAllowed;
-Body.prototype.setSleepingAllowed = Body.prototype.SetSleepingAllowed;
-Body.prototype.isAwake = Body.prototype.IsAwake;
-Body.prototype.setAwake = Body.prototype.SetAwake;
-Body.prototype.isActive = Body.prototype.IsActive;
-Body.prototype.setActive = Body.prototype.SetActive;
-
-Body.prototype.isFixedRotation = Body.prototype.IsFixedRotation;
-Body.prototype.setFixedRotation = Body.prototype.SetFixedRotation;
-
-Vec2.prototype.set = function(x,y){
-    if(y == undefined){
-      this.SetV(x);
-    }else{
-      this.Set(x,y);
-    }
-  };
-Vec2.prototype.setZero = Vec2.prototype.SetZero;
-Vec2.prototype.mul = function (a){
-    return new Vec2(this.x * a, this.y * a);
-  };
-Vec2.prototype.mulLocal = function (a){
-    this.Multiply(a);
-    return this;
-  };
-Vec2.prototype.add = function (v){
-    //retVal = new Vec2(0, 0);
-    //retVal.set(this);
-    retVal = this.clone();
-    retVal.Add(v);
-    return retVal;
-  };
-Vec2.prototype.addLocal = function (x,y){
-    if(y == undefined){
-      this.Add(x);
-    }else{
-      this.Add(new Vec2(x,y));
-    }
-    return this;
-  };
-Vec2.prototype.sub = function (v){
-    //retVal = new Vec2(0, 0);
-    //retVal.set(this);
-    retVal = this.clone();
-    retVal.Subtract(v);
-    return retVal;
-  };
-  
-Vec2.prototype.subLocal = function (x,y){
-    if(y == undefined){
-      this.Subtract(x);
-    }else{
-      this.Subtract(new Vec2(x,y));
-    }
-    return this;
-  };
-
-Vec2.prototype.negate = Vec2.prototype.GetNegative;
-Vec2.prototype.negateLocal = Vec2.prototype.NegativeSelf;
-Vec2.prototype.normalize = Vec2.prototype.Normalize;
-Vec2.prototype.length = Vec2.prototype.Length;
-Vec2.prototype.lengthSquared = Vec2.prototype.LengthSquared;
-Vec2.prototype.abs = function (){
-    retVal = new Vec2(this.x, this.y);
-    return retVal.Abs();
-  };
-Vec2.prototype.absLocal = Vec2.prototype.Abs;
-Vec2.prototype.isValid = Vec2.prototype.IsValid;
-Vec2.prototype.clone = function (){
-    return new Vec2(this.x, this.y);
-  };
+    Body.prototype.getLocalPoint = Body.prototype.GetLocalPoint;
+    Body.prototype.getLocalPointToOut = function(worldPoint, out){
+    	out = this.getLocalPoint(worldPoint);
+    };
+    Body.prototype.getLocalVector = Body.prototype.GetLocalVector;
+    Body.prototype.getLocalVectorToOut = function(worldPoint, out){
+    	out = this.getLocalVector(worldPoint);
+    };
+    Body.prototype.getLocalVectorToOutUnsafe = Body.prototype.getLocalVectorToOut;
 
 
-DistanceJoint.prototype.getType = DistanceJoint.prototype.GetType;
-DistanceJoint.prototype.getBodyA = DistanceJoint.prototype.GetBodyA;
-DistanceJoint.prototype.getBodyB = DistanceJoint.prototype.GetBodyB;
-DistanceJoint.prototype.getAnchorA = DistanceJoint.prototype.GetAnchorA;
-DistanceJoint.prototype.getAnchorB = DistanceJoint.prototype.GetAnchorB;
-DistanceJoint.prototype.getReactionForce = DistanceJoint.prototype.GetReactionForce;
-DistanceJoint.prototype.getReactionTorque = DistanceJoint.prototype.GetReactionTorque;
-DistanceJoint.prototype.getNext = DistanceJoint.prototype.GetNext;
-DistanceJoint.prototype.getUserData = DistanceJoint.prototype.GetUserData;
-DistanceJoint.prototype.setUserData = DistanceJoint.prototype.SetUserData;
-DistanceJoint.prototype.isActive = DistanceJoint.prototype.IsActive;
+    Body.prototype.getLinearVelocityFromWorldPoint  = Body.prototype.GetLinearVelocity;
+    Body.prototype.getLinearVelocityFromWorldPointToOut = function(worldPoint, out){
+    	out = this.getLinearVelocityFromWorldPoint(worldPoint);
+    };
+    Body.prototype.getLinearVelocityFromLocalPoint  = Body.prototype.GetLinearVelocity;
+    Body.prototype.getLinearVelocityFromLocalPointToOut = function(localPoint, out){
+    	out = this.getLinearVelocityFromLocalPoint(localPoint);
+    };
 
-DistanceJoint.prototype.getLength = DistanceJoint.prototype.GetLength;
-DistanceJoint.prototype.setLength = DistanceJoint.prototype.SetLength;
-DistanceJoint.prototype.getFrequency = DistanceJoint.prototype.GetFrequency;
-DistanceJoint.prototype.setFrequency = DistanceJoint.prototype.SetFrequency;
-DistanceJoint.prototype.getDampingRatio = DistanceJoint.prototype.GetDampingRatio;
-DistanceJoint.prototype.setDampingRatio = DistanceJoint.prototype.SetDampingRatio;
+    Body.prototype.getLinearDamping = Body.prototype.GetLinearDamping;
+    Body.prototype.setLinearDamping = Body.prototype.SetLinearDamping;
+    Body.prototype.getAngularDamping = Body.prototype.GetAngularDamping;
+    Body.prototype.setAngularDamping = Body.prototype.SetAngularDamping;
+
+    Body.prototype.getType = Body.prototype.GetType;
+    Body.prototype.setType = Body.prototype.SetType;
+
+    Body.prototype.isBullet = Body.prototype.IsBullet;
+    Body.prototype.setBullet = Body.prototype.SetBullet;
+
+    Body.prototype.isSleepingAllowed = Body.prototype.IsSleepingAllowed;
+    Body.prototype.setSleepingAllowed = Body.prototype.SetSleepingAllowed;
+    Body.prototype.isAwake = Body.prototype.IsAwake;
+    Body.prototype.setAwake = Body.prototype.SetAwake;
+    Body.prototype.isActive = Body.prototype.IsActive;
+    Body.prototype.setActive = Body.prototype.SetActive;
+
+    Body.prototype.isFixedRotation = Body.prototype.IsFixedRotation;
+    Body.prototype.setFixedRotation = Body.prototype.SetFixedRotation;
+
+    Vec2.prototype.set = function(x,y){
+        if(y == undefined){
+          this.SetV(x);
+        }else{
+          this.Set(x,y);
+        }
+      };
+    Vec2.prototype.setZero = Vec2.prototype.SetZero;
+    Vec2.prototype.mul = function (a){
+        return new Vec2(this.x * a, this.y * a);
+      };
+    Vec2.prototype.mulLocal = function (a){
+        this.Multiply(a);
+        return this;
+      };
+    Vec2.prototype.add = function (v){
+        //retVal = new Vec2(0, 0);
+        //retVal.set(this);
+        retVal = this.clone();
+        retVal.Add(v);
+        return retVal;
+      };
+    Vec2.prototype.addLocal = function (x,y){
+        if(y == undefined){
+          this.Add(x);
+        }else{
+          this.Add(new Vec2(x,y));
+        }
+        return this;
+      };
+    Vec2.prototype.sub = function (v){
+        //retVal = new Vec2(0, 0);
+        //retVal.set(this);
+        retVal = this.clone();
+        retVal.Subtract(v);
+        return retVal;
+      };
+
+    Vec2.prototype.subLocal = function (x,y){
+        if(y == undefined){
+          this.Subtract(x);
+        }else{
+          this.Subtract(new Vec2(x,y));
+        }
+        return this;
+      };
+
+    Vec2.prototype.negate = Vec2.prototype.GetNegative;
+    Vec2.prototype.negateLocal = Vec2.prototype.NegativeSelf;
+    Vec2.prototype.normalize = Vec2.prototype.Normalize;
+    Vec2.prototype.length = Vec2.prototype.Length;
+    Vec2.prototype.lengthSquared = Vec2.prototype.LengthSquared;
+    Vec2.prototype.abs = function (){
+        retVal = new Vec2(this.x, this.y);
+        return retVal.Abs();
+      };
+    Vec2.prototype.absLocal = Vec2.prototype.Abs;
+    Vec2.prototype.isValid = Vec2.prototype.IsValid;
+    Vec2.prototype.clone = function (){
+        return new Vec2(this.x, this.y);
+      };
 
 
-RevoluteJoint.prototype.getType = RevoluteJoint.prototype.GetType;
-RevoluteJoint.prototype.getBodyA = RevoluteJoint.prototype.GetBodyA;
-RevoluteJoint.prototype.getBodyB = RevoluteJoint.prototype.GetBodyB;
-RevoluteJoint.prototype.getAnchorA = RevoluteJoint.prototype.GetAnchorA;
-RevoluteJoint.prototype.getAnchorB = RevoluteJoint.prototype.GetAnchorB;
-RevoluteJoint.prototype.getReactionForce = RevoluteJoint.prototype.GetReactionForce;
-RevoluteJoint.prototype.getReactionTorque = RevoluteJoint.prototype.GetReactionTorque;
-RevoluteJoint.prototype.getNext = RevoluteJoint.prototype.GetNext;
-RevoluteJoint.prototype.getUserData = RevoluteJoint.prototype.GetUserData;
-RevoluteJoint.prototype.setUserData = RevoluteJoint.prototype.SetUserData;
-RevoluteJoint.prototype.isActive = RevoluteJoint.prototype.IsActive;
+    DistanceJoint.prototype.getType = DistanceJoint.prototype.GetType;
+    DistanceJoint.prototype.getBodyA = DistanceJoint.prototype.GetBodyA;
+    DistanceJoint.prototype.getBodyB = DistanceJoint.prototype.GetBodyB;
+    DistanceJoint.prototype.getAnchorA = DistanceJoint.prototype.GetAnchorA;
+    DistanceJoint.prototype.getAnchorB = DistanceJoint.prototype.GetAnchorB;
+    DistanceJoint.prototype.getReactionForce = DistanceJoint.prototype.GetReactionForce;
+    DistanceJoint.prototype.getReactionTorque = DistanceJoint.prototype.GetReactionTorque;
+    DistanceJoint.prototype.getNext = DistanceJoint.prototype.GetNext;
+    DistanceJoint.prototype.getUserData = DistanceJoint.prototype.GetUserData;
+    DistanceJoint.prototype.setUserData = DistanceJoint.prototype.SetUserData;
+    DistanceJoint.prototype.isActive = DistanceJoint.prototype.IsActive;
 
-RevoluteJoint.prototype.getJointAngle = RevoluteJoint.prototype.GetJointAngle;
-RevoluteJoint.prototype.getJointSpeed = RevoluteJoint.prototype.GetJointSpeed;
-RevoluteJoint.prototype.isLimitEnabled = RevoluteJoint.prototype.IsLimitEnabled;
-RevoluteJoint.prototype.enableLimit = RevoluteJoint.prototype.EnableLimit;
-RevoluteJoint.prototype.getLowerLimit = RevoluteJoint.prototype.GetLowerLimit;
-RevoluteJoint.prototype.getUpperLimit = RevoluteJoint.prototype.GetUpperLimit;
-RevoluteJoint.prototype.setLimits = RevoluteJoint.prototype.SetLimits;
-RevoluteJoint.prototype.isMotorEnabled = RevoluteJoint.prototype.IsMotorEnabled;
-RevoluteJoint.prototype.enableMotor = RevoluteJoint.prototype.EnableMotor;
-RevoluteJoint.prototype.getMotorTorque = RevoluteJoint.prototype.GetMotorTorque;
-RevoluteJoint.prototype.getMotorSpeed = RevoluteJoint.prototype.GetMotorSpeed;
-RevoluteJoint.prototype.setMotorSpeed = RevoluteJoint.prototype.SetMotorSpeed;
-RevoluteJoint.prototype.setMaxMotorTorque = RevoluteJoint.prototype.setMaxMotorTorque;
-RevoluteJoint.prototype.getMaxMotorTorque = RevoluteJoint.prototype.getMaxMotorTorque;
+    DistanceJoint.prototype.getLength = DistanceJoint.prototype.GetLength;
+    DistanceJoint.prototype.setLength = DistanceJoint.prototype.SetLength;
+    DistanceJoint.prototype.getFrequency = DistanceJoint.prototype.GetFrequency;
+    DistanceJoint.prototype.setFrequency = DistanceJoint.prototype.SetFrequency;
+    DistanceJoint.prototype.getDampingRatio = DistanceJoint.prototype.GetDampingRatio;
+    DistanceJoint.prototype.setDampingRatio = DistanceJoint.prototype.SetDampingRatio;
 
 
-PrismaticJoint.prototype.getType = PrismaticJoint.prototype.GetType;
-PrismaticJoint.prototype.getBodyA = PrismaticJoint.prototype.GetBodyA;
-PrismaticJoint.prototype.getBodyB = PrismaticJoint.prototype.GetBodyB;
-PrismaticJoint.prototype.getAnchorA = PrismaticJoint.prototype.GetAnchorA;
-PrismaticJoint.prototype.getAnchorB = PrismaticJoint.prototype.GetAnchorB;
-PrismaticJoint.prototype.getReactionForce = PrismaticJoint.prototype.GetReactionForce;
-PrismaticJoint.prototype.getReactionTorque = PrismaticJoint.prototype.GetReactionTorque;
-PrismaticJoint.prototype.getNext = PrismaticJoint.prototype.GetNext;
-PrismaticJoint.prototype.getUserData = PrismaticJoint.prototype.GetUserData;
-PrismaticJoint.prototype.setUserData = PrismaticJoint.prototype.SetUserData;
-PrismaticJoint.prototype.isActive = PrismaticJoint.prototype.IsActive;
+    RevoluteJoint.prototype.getType = RevoluteJoint.prototype.GetType;
+    RevoluteJoint.prototype.getBodyA = RevoluteJoint.prototype.GetBodyA;
+    RevoluteJoint.prototype.getBodyB = RevoluteJoint.prototype.GetBodyB;
+    RevoluteJoint.prototype.getAnchorA = RevoluteJoint.prototype.GetAnchorA;
+    RevoluteJoint.prototype.getAnchorB = RevoluteJoint.prototype.GetAnchorB;
+    RevoluteJoint.prototype.getReactionForce = RevoluteJoint.prototype.GetReactionForce;
+    RevoluteJoint.prototype.getReactionTorque = RevoluteJoint.prototype.GetReactionTorque;
+    RevoluteJoint.prototype.getNext = RevoluteJoint.prototype.GetNext;
+    RevoluteJoint.prototype.getUserData = RevoluteJoint.prototype.GetUserData;
+    RevoluteJoint.prototype.setUserData = RevoluteJoint.prototype.SetUserData;
+    RevoluteJoint.prototype.isActive = RevoluteJoint.prototype.IsActive;
 
-PrismaticJoint.prototype.getJointTranslation = PrismaticJoint.prototype.GetJointTranslation;
-PrismaticJoint.prototype.getJointSpeed = PrismaticJoint.prototype.GetJointSpeed;
-PrismaticJoint.prototype.isLimitEnabled = PrismaticJoint.prototype.IsLimitEnabled;
-PrismaticJoint.prototype.enableLimit = PrismaticJoint.prototype.EnableLimit;
-PrismaticJoint.prototype.getLowerLimit = PrismaticJoint.prototype.GetLowerLimit;
-PrismaticJoint.prototype.getUpperLimit = PrismaticJoint.prototype.GetUpperLimit;
-PrismaticJoint.prototype.setLimits = PrismaticJoint.prototype.SetLimits;
-PrismaticJoint.prototype.isMotorEnabled = PrismaticJoint.prototype.IsMotorEnabled;
-PrismaticJoint.prototype.enableMotor = PrismaticJoint.prototype.EnableMotor;
-PrismaticJoint.prototype.getMotorForce = PrismaticJoint.prototype.GetMotorForce;
-PrismaticJoint.prototype.getMotorSpeed = PrismaticJoint.prototype.GetMotorSpeed;
-PrismaticJoint.prototype.setMotorSpeed = PrismaticJoint.prototype.SetMotorSpeed;
-PrismaticJoint.prototype.setMaxMotorForce = PrismaticJoint.prototype.SetMaxMotorForce;
-PrismaticJoint.prototype.getMaxMotorForce = PrismaticJoint.prototype.GetMaxMotorForce;
+    RevoluteJoint.prototype.getJointAngle = RevoluteJoint.prototype.GetJointAngle;
+    RevoluteJoint.prototype.getJointSpeed = RevoluteJoint.prototype.GetJointSpeed;
+    RevoluteJoint.prototype.isLimitEnabled = RevoluteJoint.prototype.IsLimitEnabled;
+    RevoluteJoint.prototype.enableLimit = RevoluteJoint.prototype.EnableLimit;
+    RevoluteJoint.prototype.getLowerLimit = RevoluteJoint.prototype.GetLowerLimit;
+    RevoluteJoint.prototype.getUpperLimit = RevoluteJoint.prototype.GetUpperLimit;
+    RevoluteJoint.prototype.setLimits = RevoluteJoint.prototype.SetLimits;
+    RevoluteJoint.prototype.isMotorEnabled = RevoluteJoint.prototype.IsMotorEnabled;
+    RevoluteJoint.prototype.enableMotor = RevoluteJoint.prototype.EnableMotor;
+    RevoluteJoint.prototype.getMotorTorque = RevoluteJoint.prototype.GetMotorTorque;
+    RevoluteJoint.prototype.getMotorSpeed = RevoluteJoint.prototype.GetMotorSpeed;
+    RevoluteJoint.prototype.setMotorSpeed = RevoluteJoint.prototype.SetMotorSpeed;
+    RevoluteJoint.prototype.setMaxMotorTorque = RevoluteJoint.prototype.setMaxMotorTorque;
+    RevoluteJoint.prototype.getMaxMotorTorque = RevoluteJoint.prototype.getMaxMotorTorque;
 
 
-PulleyJoint.prototype.getType = PulleyJoint.prototype.GetType;
-PulleyJoint.prototype.getBodyA = PulleyJoint.prototype.GetBodyA;
-PulleyJoint.prototype.getBodyB = PulleyJoint.prototype.GetBodyB;
-PulleyJoint.prototype.getAnchorA = PulleyJoint.prototype.GetAnchorA;
-PulleyJoint.prototype.getAnchorB = PulleyJoint.prototype.GetAnchorB;
-PulleyJoint.prototype.getReactionForce = PulleyJoint.prototype.GetReactionForce;
-PulleyJoint.prototype.getReactionTorque = PulleyJoint.prototype.GetReactionTorque;
-PulleyJoint.prototype.getNext = PulleyJoint.prototype.GetNext;
-PulleyJoint.prototype.getUserData = PulleyJoint.prototype.GetUserData;
-PulleyJoint.prototype.setUserData = PulleyJoint.prototype.SetUserData;
-PulleyJoint.prototype.isActive = PulleyJoint.prototype.IsActive;
+    PrismaticJoint.prototype.getType = PrismaticJoint.prototype.GetType;
+    PrismaticJoint.prototype.getBodyA = PrismaticJoint.prototype.GetBodyA;
+    PrismaticJoint.prototype.getBodyB = PrismaticJoint.prototype.GetBodyB;
+    PrismaticJoint.prototype.getAnchorA = PrismaticJoint.prototype.GetAnchorA;
+    PrismaticJoint.prototype.getAnchorB = PrismaticJoint.prototype.GetAnchorB;
+    PrismaticJoint.prototype.getReactionForce = PrismaticJoint.prototype.GetReactionForce;
+    PrismaticJoint.prototype.getReactionTorque = PrismaticJoint.prototype.GetReactionTorque;
+    PrismaticJoint.prototype.getNext = PrismaticJoint.prototype.GetNext;
+    PrismaticJoint.prototype.getUserData = PrismaticJoint.prototype.GetUserData;
+    PrismaticJoint.prototype.setUserData = PrismaticJoint.prototype.SetUserData;
+    PrismaticJoint.prototype.isActive = PrismaticJoint.prototype.IsActive;
 
-PulleyJoint.prototype.getLengthA = PulleyJoint.prototype.GetLengthA;
-PulleyJoint.prototype.getLengthB = PulleyJoint.prototype.GetLengthB;
-PulleyJoint.prototype.getCurrentLengthA = PulleyJoint.prototype.GetCurrentLengthA;
-PulleyJoint.prototype.getCurrentLengthB = PulleyJoint.prototype.GetCurrentLengthB;
-PulleyJoint.prototype.getLengthA = PulleyJoint.prototype.GetLengthA;
-PulleyJoint.prototype.getLengthB = PulleyJoint.prototype.GetLengthB;
-PulleyJoint.prototype.getLocalAnchorA = PulleyJoint.prototype.GetLocalAnchorA;
-PulleyJoint.prototype.getLocalAnchorB = PulleyJoint.prototype.GetLocalAnchorB;
-PulleyJoint.prototype.getGroundAnchorA = PulleyJoint.prototype.GetGroundAnchorA;
-PulleyJoint.prototype.getGroundAnchorB = PulleyJoint.prototype.GetGroundAnchorB;
-PulleyJoint.prototype.getLength1 = PulleyJoint.prototype.GetLength1;
-PulleyJoint.prototype.getLength2 = PulleyJoint.prototype.GetLength2;
-PulleyJoint.prototype.getRatio = PulleyJoint.prototype.GetRatio;
+    PrismaticJoint.prototype.getJointTranslation = PrismaticJoint.prototype.GetJointTranslation;
+    PrismaticJoint.prototype.getJointSpeed = PrismaticJoint.prototype.GetJointSpeed;
+    PrismaticJoint.prototype.isLimitEnabled = PrismaticJoint.prototype.IsLimitEnabled;
+    PrismaticJoint.prototype.enableLimit = PrismaticJoint.prototype.EnableLimit;
+    PrismaticJoint.prototype.getLowerLimit = PrismaticJoint.prototype.GetLowerLimit;
+    PrismaticJoint.prototype.getUpperLimit = PrismaticJoint.prototype.GetUpperLimit;
+    PrismaticJoint.prototype.setLimits = PrismaticJoint.prototype.SetLimits;
+    PrismaticJoint.prototype.isMotorEnabled = PrismaticJoint.prototype.IsMotorEnabled;
+    PrismaticJoint.prototype.enableMotor = PrismaticJoint.prototype.EnableMotor;
+    PrismaticJoint.prototype.getMotorForce = PrismaticJoint.prototype.GetMotorForce;
+    PrismaticJoint.prototype.getMotorSpeed = PrismaticJoint.prototype.GetMotorSpeed;
+    PrismaticJoint.prototype.setMotorSpeed = PrismaticJoint.prototype.SetMotorSpeed;
+    PrismaticJoint.prototype.setMaxMotorForce = PrismaticJoint.prototype.SetMaxMotorForce;
+    PrismaticJoint.prototype.getMaxMotorForce = PrismaticJoint.prototype.GetMaxMotorForce;
 
-GearJoint.prototype.getType = GearJoint.prototype.GetType;
-GearJoint.prototype.getBodyA = GearJoint.prototype.GetBodyA;
-GearJoint.prototype.getBodyB = GearJoint.prototype.GetBodyB;
-GearJoint.prototype.getAnchorA = GearJoint.prototype.GetAnchorA;
-GearJoint.prototype.getAnchorB = GearJoint.prototype.GetAnchorB;
-GearJoint.prototype.getReactionForce = GearJoint.prototype.GetReactionForce;
-GearJoint.prototype.getReactionTorque = GearJoint.prototype.GetReactionTorque;
-GearJoint.prototype.getNext = GearJoint.prototype.GetNext;
-GearJoint.prototype.getUserData = GearJoint.prototype.GetUserData;
-GearJoint.prototype.setUserData = GearJoint.prototype.SetUserData;
-GearJoint.prototype.isActive = GearJoint.prototype.IsActive;
 
-GearJoint.prototype.getRatio = GearJoint.prototype.GetRatio;
-GearJoint.prototype.setRatio = GearJoint.prototype.SetRatio;
+    PulleyJoint.prototype.getType = PulleyJoint.prototype.GetType;
+    PulleyJoint.prototype.getBodyA = PulleyJoint.prototype.GetBodyA;
+    PulleyJoint.prototype.getBodyB = PulleyJoint.prototype.GetBodyB;
+    PulleyJoint.prototype.getAnchorA = PulleyJoint.prototype.GetAnchorA;
+    PulleyJoint.prototype.getAnchorB = PulleyJoint.prototype.GetAnchorB;
+    PulleyJoint.prototype.getReactionForce = PulleyJoint.prototype.GetReactionForce;
+    PulleyJoint.prototype.getReactionTorque = PulleyJoint.prototype.GetReactionTorque;
+    PulleyJoint.prototype.getNext = PulleyJoint.prototype.GetNext;
+    PulleyJoint.prototype.getUserData = PulleyJoint.prototype.GetUserData;
+    PulleyJoint.prototype.setUserData = PulleyJoint.prototype.SetUserData;
+    PulleyJoint.prototype.isActive = PulleyJoint.prototype.IsActive;
 
-/*
-Vec2 = function(x,y){
-	v = new b2Vec2(x,y);
-	v.mul = function (x,y){
-		this.Multiply(x,y);
-		return this;
-	};
-	v.add = function (x,y){
-		retVal = new Vec2(0, 0);
-		retVal.set(this);
-		retVal.Add(x,y);
-		return retVal;
-	};
-	v.sub = function (x,y){
-		retVal = new Vec2(0, 0);
-		retVal.set(this);
-		retVal.Subtract(x,y);
-		return retVal;
-	};
-	v.normalize = v.Normalize;
-	v.set = function(x,y){
-		if(y == undefined){
-			v.SetV(x);
-		}else{
-			v.Set(x,y);
-		}
-	}
-	return v;
-};
-*/
+    PulleyJoint.prototype.getLengthA = PulleyJoint.prototype.GetLengthA;
+    PulleyJoint.prototype.getLengthB = PulleyJoint.prototype.GetLengthB;
+    PulleyJoint.prototype.getCurrentLengthA = PulleyJoint.prototype.GetCurrentLengthA;
+    PulleyJoint.prototype.getCurrentLengthB = PulleyJoint.prototype.GetCurrentLengthB;
+    PulleyJoint.prototype.getLengthA = PulleyJoint.prototype.GetLengthA;
+    PulleyJoint.prototype.getLengthB = PulleyJoint.prototype.GetLengthB;
+    PulleyJoint.prototype.getLocalAnchorA = PulleyJoint.prototype.GetLocalAnchorA;
+    PulleyJoint.prototype.getLocalAnchorB = PulleyJoint.prototype.GetLocalAnchorB;
+    PulleyJoint.prototype.getGroundAnchorA = PulleyJoint.prototype.GetGroundAnchorA;
+    PulleyJoint.prototype.getGroundAnchorB = PulleyJoint.prototype.GetGroundAnchorB;
+    PulleyJoint.prototype.getLength1 = PulleyJoint.prototype.GetLength1;
+    PulleyJoint.prototype.getLength2 = PulleyJoint.prototype.GetLength2;
+    PulleyJoint.prototype.getRatio = PulleyJoint.prototype.GetRatio;
 
-Physics = function (sketch, screenW,  screenH,
-								   gravX, gravY,
-								   screenAABBWidth, screenAABBHeight,
-								   borderBoxWidth, borderBoxHeight,
-								   pixelsPerMeter){
-	
+    GearJoint.prototype.getType = GearJoint.prototype.GetType;
+    GearJoint.prototype.getBodyA = GearJoint.prototype.GetBodyA;
+    GearJoint.prototype.getBodyB = GearJoint.prototype.GetBodyB;
+    GearJoint.prototype.getAnchorA = GearJoint.prototype.GetAnchorA;
+    GearJoint.prototype.getAnchorB = GearJoint.prototype.GetAnchorB;
+    GearJoint.prototype.getReactionForce = GearJoint.prototype.GetReactionForce;
+    GearJoint.prototype.getReactionTorque = GearJoint.prototype.GetReactionTorque;
+    GearJoint.prototype.getNext = GearJoint.prototype.GetNext;
+    GearJoint.prototype.getUserData = GearJoint.prototype.GetUserData;
+    GearJoint.prototype.setUserData = GearJoint.prototype.SetUserData;
+    GearJoint.prototype.isActive = GearJoint.prototype.IsActive;
+
+    GearJoint.prototype.getRatio = GearJoint.prototype.GetRatio;
+    GearJoint.prototype.setRatio = GearJoint.prototype.SetRatio;
+
+    /*
+    Vec2 = function(x,y){
+    	v = new b2Vec2(x,y);
+    	v.mul = function (x,y){
+    		this.Multiply(x,y);
+    		return this;
+    	};
+    	v.add = function (x,y){
+    		retVal = new Vec2(0, 0);
+    		retVal.set(this);
+    		retVal.Add(x,y);
+    		return retVal;
+    	};
+    	v.sub = function (x,y){
+    		retVal = new Vec2(0, 0);
+    		retVal.set(this);
+    		retVal.Subtract(x,y);
+    		return retVal;
+    	};
+    	v.normalize = v.Normalize;
+    	v.set = function(x,y){
+    		if(y == undefined){
+    			v.SetV(x);
+    		}else{
+    			v.Set(x,y);
+    		}
+    	}
+    	return v;
+    };
+    */
+  })();
+
 	if(gravX == undefined) gravX = 0.0;
 	if(gravY == undefined) { 
             gravY = 10.0;
